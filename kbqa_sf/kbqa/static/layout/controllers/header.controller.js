@@ -1,0 +1,1 @@
+!function(){"use strict";function n(){}angular.module("app").controller("HeaderController",n),n.$inject=[]}();

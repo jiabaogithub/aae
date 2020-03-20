@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+>
+<head>
+    <meta charset="utf-8"/>
+    <title>【出口退税】智能问答系统</title>
+    <style type="text/css">
+        * {
+            font-size: 14px;
+            padding: 0;
+            margin: 0;
+        }
+
+        .main {
+            position: absolute;
+            margin: 0px auto;
+            border: 0px solid steelblue;
+            width: 100%;
+            height: 430px;
+        }
+
+        .msgInput {
+            display: block;
+            width: 100%;
+            height: 80px;
+            margin: 10px auto;
+        }
+
+        .content {
+            list-style: none;
+            width: 100%;
+            height: 100%;
+            margin: 5px auto;
+            border: 1px dotted #D1D3D6;
+            overflow-y: scroll;
+        }
+
+        .msgContent {
+            width: auto;
+            max-width: 100%;
+            height: auto;
+            word-break: break-all;
+            margin: 5px;
+            padding: 3px;
+            border-radius: 5px;
+        }
+
+        .content .left {
+            float: left;
+            text-align: left;
+            background-color: white;
+            clear: left;
+        }
+
+        .content .right {
+            float: right;
+            text-align: right;
+            background-color: yellowgreen;
+        }
+    </style>
+    <style>
+        html, body {
+            font-size: 14px;
+            font-family: "微软雅黑", Helvetica, Tahoma, Arial, sans-serif;
+            color: #000;
+            background-color: #d0cdff1f;
+            margin: 0;
+            padding: 0;
+        }
+
+        img {
+            border: 0;
+        }
+
+        .cf:before, .cf:after {
+            display: table;
+            content: "";
+        }
+
+        .cf:after {
+            clear: both;
+        }
+
+        .cf {
+            *zoom: 1;
+        }
+
+        /*canvas {*/
+        /*position: fixed;*/
+        /*top: 0px;*/
+        /*}*/
+    </style>
+    <script src="js/jquery.min.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        window.onload = function () {
+
+            document.getElementById('sendbtn').onclick = function () {
+                sendMsg();
+            }
+
+            //enter键 发送
+            document.onkeypress = function (event) {
+                var e = event || window.event;
+                var keycode = e.keyCode || e.which;
+                console.log(e)
+                if (keycode == 13) {//按下enter键
+                    sendMsg()
+                }
+            }
+
+            function sendMsg() {
+                var input = document.getElementById('msg_input');
+                if (!input.value || input.value.replace(/\s+/g, "").length === 0) {
+                    alert("没有消息可以发送哦~");
+                    return;
+                }
+                var ul = document.getElementById('content');
+
+                var newLi = document.createElement('li');
+                newLi.innerHTML = input.value;
+                newLi.className = 'msgContent right';
+                ul.appendChild(newLi);
+
+                var div = document.createElement('div');
+                div.style = 'clear:both';
+                ul.appendChild(div);
+
+                $.ajax({
+                    url: 'replier/ask',
+                    type: 'POST',
+                    data: JSON.stringify({"q": input.value, "t": new Date().getTime()}),
+                    async: true,
+                    contentType: "application/json; charset=utf-8",
+                    success: function (res) {
+                        var newLi = document.createElement('li');
+                        var tipstr = "以下是我找到的相关问题和答案，希望能够帮助到您哦~O(∩_∩)O：";
+                        if (res['a']) {
+                            newLi.innerHTML = res['a'];
+                            newLi.className = 'msgContent left';
+                            ul.appendChild(newLi);
+                            tipstr = "答案不满意？可以再看看这些问题哦~O(∩_∩)O"
+                        } else {
+                            ul.appendChild(newLi);
+                        }
+                        var guess = res['q_a_guess']
+                        if (guess) {
+                            var newLi2 = document.createElement('li');
+                            newLi2.innerHTML = tipstr;
+                            newLi2.className = 'msgContent left';
+                            ul.appendChild(newLi2);
+                            for (var i = 0; i < guess.length; i++) {
+                                var newLi3 = document.createElement('li');
+                                newLi3.innerHTML = "【" + (i + 1) + "】 " + guess[i][0] + "<br/><hr/>" + guess[i][1];
+                                newLi3.className = 'msgContent left';
+                                ul.appendChild(newLi3);
+                            }
+                        }
+                        var div = document.createElement('div');
+                        div.style = 'clear:both';
+                        ul.appendChild(div);
+                        input.value = '';
+                        newLi.scrollIntoView();//将元素滚动到可见位置
+                    }
+                })
+
+                input.value = '';
+                newLi.scrollIntoView();//将元素滚动到可见位置
+            }
+
+        }
+
+    </script>
+
+</head>
+<body>
+<div id="main" class="main">
+    <ul id="content" class="content">
+        <li class="msgContent left">*为保证使用体验，请使用谷歌浏览器访问本Demo页面*</li>
+        <li class="msgContent left">您好，我是小天~O(∩_∩)O~，有什么【出口退税】方面的问题可以问我哦~</li>
+        <li class="msgContent left">我目前已经学习的知识有： 【汇率】 , 【离岸价】 , 【退运】 , 【出口冲减】</li>
+        <li class="msgContent left">这里给您列举了几个问题示例~<br/>
+            <hr/>
+            -购买一批商品出口到国外，税局要求做免税，企业咨询除了填出口货物劳务免税是否还需填写其他？<br/>
+            -CIF价成交的没有收汇的货样广告品做免税，会计咨询如何录入，录入的金额是录入FOB价还是CIF价？<br/>
+            -咨询不予免抵退出口货物劳务免税怎么填写？<br/>
+        </li>
+        <li class="msgContent left">请开始提问吧O(∩_∩)O~</li>
+        <div style="clear: both"></div>
+    </ul>
+    <textarea id="msg_input" class="msgInput" placeholder="请在此输入..."></textarea>
+    <button id="sendbtn" class="msgInput">发送</button>
+</div>
+</body>
+
+</html>

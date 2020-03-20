@@ -1,0 +1,136 @@
+<div class="ms-hero ms-hero-material" id="displayQuestionPanel" style="overflow-y: auto">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col">
+                <div class="media">
+                    <img class="align-self-start mr-3" src="resources/img/demo/ibox.png"
+                         alt="Generic placeholder image">
+                    <div class="media-body">
+                        <div class="card card-body bg-white float-left p-2">
+<!--                           <p class="text-left text-danger">我个人比较喜欢谷歌浏览器，也推荐你使用哈😄</p> -->
+                            <!-- <p class="text-left text-info">Hi，你觉得我要问你什么样的问题才可以认识你呢？<br>-->
+                            <p class="text-left">Hi，你觉得我要问你什么样的问题才可以认识你呢？<br>
+                                <!--【视同内销】 , 【视同自产】 , 【商品代码】 , 【出口企业信息查询申请】 , 【收汇】 , 【汇率】 , 【代理出口】 , <br/>
+                                【出口冲减】 , 【离岸价】 , 【核查】 , 【自查表】 , 【操作细节】 , 【加工贸易】 ,【折让】 , 【货样广告品】 , <br/>
+                                【特殊业务类型电子信息申报表】 , 【免税】 , 【水电气退税】 , 【换汇成本】 ,【旧设备出口】 , 【增值税报表】 ,  <br/>
+                                【退运】 , 【零税率应税服务】</p>
+                            <h3 class="text-success">下面是几个问题示例~：</h3>
+                            <p class="text-left text-warning pl-3">
+                                -购买一批商品出口到国外，税局要求做免税，除了填出口货物劳务免税是否还需填写其他？<br>
+                                -CIF价成交的没有收汇的货样广告品做免税，如何录入？<br>
+                                -不予免抵退出口货物劳务免税怎么填写？<br>
+                            </p>
+                            <h3 class="text-success">请开始提问吧O(∩_∩)O~</h3> -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid">
+        <div class="row" ng-repeat="media in vm.mediaList">
+            <div class="col">
+                <div ng-if="media.type=='Q'" class="media">
+                    <div class="media-body">
+                        <div class="card card-body bg-green-light float-right p-2" ng-bind-html="media.content|trustHtml"></div>
+                    </div>
+                    <img class="align-self-start mr-3" src="resources/img/demo/ask.png" alt="Generic placeholder image">
+                </div>
+                <div ng-if="media.type=='A'" class="media">
+                    <img class="align-self-start mr-3" src="resources/img/demo/ibox.png"
+                         alt="Generic placeholder image">
+                    <div class="media-body">
+                        <div class="card card-body bg-white float-left p-2">
+                            <ul class="list-unstyled m-0">
+                                <li class="media my-2" ng-repeat="item in media.items">
+                                    <div class="media-body">
+                                        <h5 ng-if="item.title">{{$index+1}}、{{item.title}}
+                                            <button ng-if="$index>0&&!item.tagged" class="btn btn-orange btn-sm"
+                                                    ng-click="vm.taggingAnswer(media,item)">标注为最佳答案
+                                            </button>
+                                            <button ng-if="item.tagged" class="btn btn-success btn-sm">已标注为最佳答案</button>
+                                            <button class="btn btn-primary btn-sm"
+                                                    ng-click="vm.reviseAnswer(media,item)">修订
+                                            </button>
+                                        </h5>
+                                        <hr ng-if="item.title" class="mt-0 mb-1">
+                                        <p ng-bind-html="item.content|trustHtml"></p>
+                                    </div>
+                                </li>
+                            </ul>
+                            <h5>
+                                <button class="btn btn-danger btn-sm" ng-click="vm.addNewAnswer(media)">不满意，调教一下。</button>
+                            </h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="ms-hero ms-hero-material fixed-bottom" id="questionPanel">
+    <div class="container-fluid pb-4">
+        <div class="card">
+            <div class="card-body p-2">
+                <textarea id="askQuestion" name="textarea-input" rows="5" class="form-control" ng-model="vm.question"
+                          placeholder="请输入您的问题..."></textarea>
+            </div>
+            <div class="card-footer text-right">
+                <button class="btn btn-primary" ng-click="vm.submitQuestion()">提交问题</button>
+                <!--<a href="#" ng-disabled="vm.doStudying" class="ml-3" ng-click="vm.startStudyOnLine()"><u>开始学习</u></a>-->
+            </div>
+        </div>
+    </div>
+</div>
+<!--修订答案-->
+<div id="reviseAnswerModal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog  modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="reviseAnswerArea" ng-bind-html="vm.answer.title|trustHtml"></label>
+                        <textarea id="reviseAnswerArea" name="textarea-input" rows="5" class="form-control"
+                                  ng-model="vm.answer.content" placeholder="请输入问题的答案..."
+                                  style="min-height: 200px;"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-raised btn-primary" ng-click="vm.doReviseAnswer()">开始学习</button>
+                <button type="button" class="btn btn-raised btn-secondary" data-dismiss="modal">取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--添加新答案-->
+<div id="addNewAnswerModal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog  modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="addNewAnswerArea" ng-bind-html="vm.newAnswer.title|trustHtml"></label>
+                        <textarea id="addNewAnswerArea" name="textarea-input" rows="5" class="form-control"
+                                  ng-model="vm.newAnswer.content" placeholder="请输入您期望的回复~"
+                                  style="min-height: 200px;"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="addNewAnswerCategory">所属类别</label>
+                        <div id="addNewAnswerCategory" class="align-content-around" >
+                            <div class="custom-control custom-radio custom-control-inline pt-1" ng-repeat="category in vm.categoryList">
+                                <input type="radio" id="RD_{{category.code}}" name="categoryRadio" value="{{category.code}}" ng-model="vm.newAnswer.category" class="custom-control-input">
+                                <label class="custom-control-label" for="RD_{{category.code}}">{{category.text}}</label>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-raised btn-primary" ng-click="vm.doAddNewAnswer()">开始学习</button>
+                <button type="button" class="btn btn-raised btn-secondary" data-dismiss="modal">取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+

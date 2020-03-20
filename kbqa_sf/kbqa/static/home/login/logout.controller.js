@@ -1,0 +1,1 @@
+!function(){"use strict";function o(o,t){t.logout(),o.go("app.dashboard",{},{reload:!0})}angular.module("app.login").controller("LogoutController",o),o.$inject=["$state","authService"]}();

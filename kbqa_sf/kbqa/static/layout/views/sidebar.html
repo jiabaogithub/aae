@@ -1,0 +1,18 @@
+<div class="sidebar">
+    <nav class="sidebar-nav">
+        <ul class="nav">
+            <li class="nav-item">
+                <a class="nav-link" ui-sref-active="active" ui-sref="app.main"><i class="icon-speedometer"></i> Dashboard <span class="badge badge-info">NEW</span></a>
+            </li>
+
+            <li class="nav-item nav-dropdown" ng-class="{open: $state.includes(menu.code)}"  ng-repeat="menu in vm.menuList">
+                <a class="nav-link nav-dropdown-toggle" ng-class="{active: $state.includes(menu.code)}" href="javascript:;"><i class="fa fa-paint-brush"></i>{{menu.name}}</a>
+                <ul class="nav-dropdown-items">
+                    <li class="nav-item" ng-repeat="menuItem in menu.items">
+                        <a class="nav-link" ui-sref-active="active" ui-sref="{{menuItem.code}}"><i class="fa fa-sitemap"></i> {{menuItem.name}}</a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </nav>
+</div>
