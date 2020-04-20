@@ -7,7 +7,7 @@ AAE
 >- 执行 pip install --no-index -f whls -r kbqa_sf/requirements.txt 命令安装本项目所需的包。（whls目录及文件下载：https://pan.baidu.com/s/1z3kUqId5AolcqrVGNUWdzQ 提取码：613u）
 >- 创建mongodb数据库，在kbqa_config_blank.py中修改数据库相关配置，改完后务必将该文件重命名为kbqa_config.py
 >- 下载搜狗词向量模型文件(链接：https://pan.baidu.com/s/1iCNgp3bjBgqgzoXUUPBgMw 提取码：j6xo) ，放入resources/trained_models目录下
->- 依次执行testmain.py中的CheckChatterbot('test_train_sf')、CheckChatterbot('test_train_talk')、CheckChatterbot('test_build_text_vec_indx')、CheckIntentClassifier('test_full_retrain_clf')项，其它项都注释掉，此时分类器模型会生成，数据库中也会准备好相应数据。
+>- 依次执行testmain.py中的CheckIntentClassifier('test_full_retrain_clf')、CheckChatterbot('test_train_sf')、CheckChatterbot('test_train_talk')、CheckChatterbot('test_build_text_vec_indx')项，其它项都注释掉，此时分类器模型会生成，数据库中也会准备好相应数据。
 >- 从kbqa_main.py启动项目(修改app.run中的内容即可)
 >- 直接访问 http://localhost:5002 即可开始聊天
 

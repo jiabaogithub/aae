@@ -9,12 +9,12 @@ from conftest import CheckChatterbot, CheckIntentClassifier
 if __name__ == '__main__':
     suite = unittest.TestSuite()
     tests = [
-        # CheckChatterbot('test_learn'),
+        CheckIntentClassifier('test_full_retrain_clf'),
+        # CheckIntentClassifier('test_evaluate_clf')
         # CheckChatterbot('test_train_sf'),
         # CheckChatterbot('test_train_talk'), #······ 记得先禁用custom_chatbot.py中的ChatBot的preprocessors(注入了一个文本向量化的操作)，该方法在chatbot训练的时候也会被触发，在启动系统前，记得恢复，否则语义匹配阶段输入文本不会向量化
-        CheckChatterbot('test_build_text_vec_indx'),
-        # CheckIntentClassifier('test_full_retrain_clf'),
-        # CheckIntentClassifier('test_evaluate_clf')
+        # CheckChatterbot('test_build_text_vec_indx'),
+        # CheckChatterbot('test_learn'),
     ]
     suite.addTests(tests)
     runner = unittest.TextTestRunner()
