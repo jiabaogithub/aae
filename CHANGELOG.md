@@ -1,3 +1,5 @@
+#### 0.2.8-202005062018-SNAPSHOT
+>- testmain.py中添加关于禁用sf.py中的ChatBot的preprocessors的注释。
 #### 0.2.7-202004201348-SNAPSHOT
 >- 修改readme文档中关于初始化操作的顺序，应该是训练用例先执行。
 #### 0.2.6-201911041408-SNAPSHOT
